@@ -1,22 +1,25 @@
-<div class="main-keyboard">
-  @for (row of layout; track row; let isLast = $last) {
-    <div class="keyboard-row">
+<div class="pvk">
+  @for (row of layout(); track row; let isLast = $last) {
+    <div class="pvk__row">
       @if (isLast) {
         <div
-          class="keyboard-key"
+          class="pvk__key pvk__key--special"
           (click)="uppercaseEnabled = !uppercaseEnabled"
-          [class]="{ active: uppercaseEnabled }"
+          [class.pvk__key--active]="uppercaseEnabled"
         >
-          <fa-icon icon="arrow-up-from-bracket" />
+          @if (uppercaseEnabled) {
+            <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
+          } @else {
+            <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
+          }
         </div>
       }
       @for (key of row; track key; let columnIndex = $index) {
+        <!--        TODO Ripple -->
         <div
           #letterKeyRef
-          class="keyboard-key"
-          matRipple
-          [matRippleCentered]="true"
-          chfLongPress
+          class="pvk__key"
+          keyLongPress
           (longPress)="openTones(key, columnIndex, letterKeyRef)"
           (click)="writeCharacter(key)"
         >
@@ -29,17 +32,19 @@
         </div>
       }
       @if (isLast) {
-        <div class="keyboard-key" (click)="backspace.emit()">
-          <fa-icon icon="delete-left" />
+        <div class="pvk__key pvk__key--special" (click)="clickBackspace()">
+          <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
         </div>
       }
     </div>
   }
-  <div class="keyboard-row">
-    <div class="keyboard-key plain disabled">?123</div>
-    <div class="keyboard-key plain space" (click)="writeCharacter(' ', true)">Space</div>
-    <div class="keyboard-key plain validate" (click)="submitText.emit()">
-      <fa-icon icon="check" />
+  <div class="pvk__row">
+    <div class="pvk__key pvk__key--special">?123</div>
+    <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ', true)">
+      {{ spaceKeyText() }}
+    </div>
+    <div class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
+      <svg-icon name="check" [svgStyle]="iconBaseStyle" />
     </div>
   </div>
 </div>
@@ -51,16 +56,14 @@
     [cdkConnectedOverlayOpen]="toneOverlayOpen"
     [cdkConnectedOverlayOffsetY]="toneOverlayOffsetY"
     [cdkConnectedOverlayOffsetX]="toneOverlayOffsetX"
-    cdkConnectedOverlayPanelClass="tone-overlay-container"
+    cdkConnectedOverlayPanelClass="pvk__tone-overlay"
     cdkConnectedOverlayHasBackdrop
     (backdropClick)="toneOverlayOpen = false"
   >
-    <div class="tone-overlay">
-      @for (tone of toneKeys; track tone) {
-        <div class="keyboard-key mat-elevation-z8" (click)="writeCharacter(tone)">
-          {{ tone }}
-        </div>
-      }
-    </div>
+    @for (tone of toneKeys; track tone) {
+      <div class="pvk__key pvk__tone-key" (click)="writeCharacter(tone)">
+        {{ tone }}
+      </div>
+    }
   </ng-template>
 }

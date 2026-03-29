@@ -1,9 +1,15 @@
-<div class="device">
-  <p class="title">Tablet</p>
-  <pinyin-virtual-keyboard />
+<div class="device tablet-landscape">
+  <p class="title">Tablet Landscape</p>
+  <input [(ngModel)]="landscapeValue" />
+  <pinyin-virtual-keyboard [(value)]="landscapeValue" anchor="container" />
 </div>
 
-<div class="device">
-  <p class="title">Mobile</p>
-  <pinyin-virtual-keyboard />
-</div>
+<!--<div class="device tablet-portrait">-->
+<!--  <p class="title">Tablet Portrait</p>-->
+<!--  <pinyin-virtual-keyboard anchor="container" />-->
+<!--</div>-->
+
+<!--<div class="device mobile">-->
+<!--  <p class="title">Mobile</p>-->
+<!--  <pinyin-virtual-keyboard anchor="container" />-->
+<!--</div>-->

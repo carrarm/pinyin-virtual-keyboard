@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { PinyinVirtualKeyboard } from 'pinyin-virtual-keyboard';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [PinyinVirtualKeyboard],
+  imports: [FormsModule, PinyinVirtualKeyboard],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('pinyin-virtual-keyboard');
+  protected readonly landscapeValue = signal('');
 }

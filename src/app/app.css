@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.device {
+  position: relative;
+
+  height: 300px;
+  border: solid 1px gray;
+
+  p {
+    font-weight: bold;
+    margin-left: 1rem;
+  }
+}
+
+.mobile {
+  width: 400px;
+}
+
+.tablet-landscape {
+  width: 1024px;
+}
+
+.tablet-portrait {
+  width: 1400px;
+}
