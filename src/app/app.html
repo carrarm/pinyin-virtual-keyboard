@@ -1,22 +1,93 @@
 <main>
-  <div class="device mobile">
-    <p class="title">Mobile</p>
-    <label for="mobile-input">Text:</label>
-    <input id="mobile-input" [(ngModel)]="mobileValue" />
-    <pinyin-virtual-keyboard [(value)]="mobileValue" anchor="container" />
-  </div>
+  <div class="settings">
+    <div class="field-row">
+      <label for="device">Device format</label>
+      <select id="device" [(ngModel)]="format">
+        <option value="mobile">Mobile</option>
+        <option value="tablet-landscape">Tablet landscape</option>
+        <option value="tablet-portrait">Tablet portrait</option>
+      </select>
+    </div>
 
-  <div class="device tablet-landscape">
-    <p class="title">Tablet Landscape</p>
-    <label for="tablet-landscape-input">Text:</label>
-    <input id="tablet-landscape-input" [(ngModel)]="landscapeValue" />
-    <pinyin-virtual-keyboard [(value)]="landscapeValue" anchor="container" />
-  </div>
+    <div class="field-row">
+      <label for="keyboard-anchor">Keyboard anchor</label>
+      <select id="keyboard-anchor" [(ngModel)]="anchor">
+        <option value="container">Container</option>
+        <option value="fixed">Fixed</option>
+        <option value="custom">Custom</option>
+      </select>
 
-  <div class="device tablet-portrait">
-    <p class="title">Tablet Portrait</p>
-    <label for="tablet-portrait-input">Text:</label>
-    <input id="tablet-portrait-input" [(ngModel)]="portraitValue" />
-    <pinyin-virtual-keyboard [(value)]="portraitValue" anchor="container" />
+      <span>
+        to fix the keyboard in the view. "Custom" will disable the auto-positioning and lets you use
+        your own class.
+      </span>
+    </div>
+
+    <div class="field-row">
+      <label for="keyboard-layout">Keyboard layout</label>
+      <select id="keyboard-layout" [(ngModel)]="letterLayout">
+        <option value="QWERTY">QWERTY</option>
+        <option value="QWERTZ">QWERTZ</option>
+        <option value="AZERTY">AZERTY</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      <span>
+        Use a predefined layout or define your own. Use SHIFT and BACKSPACE to insert these keys in
+        your layout.
+      </span>
+    </div>
+
+    <div class="field-row">
+      <label for="symbol-layout">Symbol keyboard layout</label>
+      <select id="symbol-layout" [(ngModel)]="symbolLayout">
+        <option value="default">Default</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      <span>
+        Use the predefined layout or define your own. Numbers are not included by default when using a custom layout.
+      </span>
+    </div>
+
+    <div class="field-row">
+      <label for="simplify">Simplify text</label>
+      <select id="simplify" [(ngModel)]="simplify">
+        <option value="true">Enabled</option>
+        <option value="false">Disabled</option>
+      </select>
+
+      <span>
+        Combine a letter and digit to quickly apply a tone (a1, a2, ...). Type v to use ü.
+      </span>
+    </div>
+
+    <div class="field-row">
+      <label for="numeric-row">Top numeric row</label>
+      <select id="numeric-row" [(ngModel)]="numericRow">
+        <option value="true">Enabled</option>
+        <option value="false">Disabled</option>
+      </select>
+
+      <span>
+        Pin the numeric row at the top of the keyboard when displaying the letters. This row will
+        still appear in the symbol keyboard (if using a predefined layout).
+      </span>
+    </div>
+  </div>
+  <div class="device" [class]="format()">
+    <div class="field-row pinyin-text">
+      <label for="text-input">Text:</label>
+      <input id="text-input" [(ngModel)]="value" />
+    </div>
+
+    <pinyin-virtual-keyboard
+      [(value)]="value"
+      [keyboardLayout]="pvkLayout()"
+      [symbolKeyboardLayout]="pvkSymbolLayout()"
+      [simplify]="simplify()"
+      [baseKeyboardNumericRow]="numericRow()"
+      [anchor]="anchor()"
+    />
   </div>
 </main>

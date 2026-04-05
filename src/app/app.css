@@ -4,22 +4,37 @@
   gap: 2rem;
 
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
-label {
-  margin: 0 1rem;
+pinyin-virtual-keyboard.custom {
+  position: absolute;
+  left: 500px;
+  width: 400px;
+}
+
+.settings {
+  border: solid 1px gray;
+  margin-bottom: 2rem;
+
+  label {
+    width: 180px;
+    font-weight: bold;
+  }
 }
 
 .device {
   position: relative;
 
-  height: 350px;
+  height: 280px;
   border: solid 1px gray;
+}
 
-  p {
-    font-weight: bold;
-    margin-left: 1rem;
-  }
+.field-row {
+  margin: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
 }
 
 .mobile {
