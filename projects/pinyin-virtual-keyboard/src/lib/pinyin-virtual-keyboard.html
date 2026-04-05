@@ -4,13 +4,19 @@
       @if (isLast) {
         <div
           class="pvk__key"
-          (click)="uppercaseEnabled = !uppercaseEnabled"
+          (click)="switchCaseMode()"
           [class.pvk__key--active]="uppercaseEnabled"
         >
-          @if (uppercaseEnabled) {
-            <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
-          } @else {
-            <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
+          @switch (caseMode) {
+            @case ('upper') {
+              <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
+            }
+            @case ('upperFixed') {
+              <svg-icon name="arrow-up-bold-box" [svgStyle]="iconBaseStyle" />
+            }
+            @case ('lower') {
+              <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
+            }
           }
         </div>
       }
@@ -41,7 +47,7 @@
   <div class="pvk__row">
     <!-- TODO: remove the forced color -->
     <div class="pvk__key pvk__key--special" [style.color]="'darkgray'">?123</div>
-    <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ', true)">
+    <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
           <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
     </div>
     <div class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">

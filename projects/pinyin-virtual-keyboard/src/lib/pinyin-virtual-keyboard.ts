@@ -7,10 +7,12 @@ import { KeyLongPress } from './utils/key-long-press';
 import { getTones, hasTones } from './utils/pinyin-utils';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 import { ICONS } from './utils/icons';
+import { CaseMode } from './model/model';
 
 const TONE_KEY_WIDTH_PX = 34; // Key width + gap with other keys
 const BASE_TONE_OVERLAY_OFFSET_X = -(TONE_KEY_WIDTH_PX * 1.5);
 const BASE_TONE_OVERLAY_OFFSET_Y = -TONE_KEY_WIDTH_PX * 2.5;
+const CASE_MODE_FLOW: CaseMode[] = ['lower', 'upper', 'upperFixed'];
 
 @Component({
   selector: 'pinyin-virtual-keyboard',
@@ -81,6 +83,7 @@ export class PinyinVirtualKeyboard {
     fill: 'currentColor',
   };
 
+  protected caseMode: CaseMode = 'lower';
   protected toneOverlayOffsetY = BASE_TONE_OVERLAY_OFFSET_Y;
   protected toneOverlayOffsetX = BASE_TONE_OVERLAY_OFFSET_X;
   protected toneOverlayOpen = false;
@@ -104,14 +107,14 @@ export class PinyinVirtualKeyboard {
    * and the tone overlay.
    *
    * @param character Character to emit
-   * @param preserveCase Whether to go back to lowercase after typing
    */
-  protected writeCharacter(character: string, preserveCase = false): void {
+  protected writeCharacter(character: string): void {
     const typedChar = this.uppercaseEnabled ? character : character.toLowerCase();
     this.value.update((text) => text + typedChar);
     this.typed.emit(typedChar);
-    if (!preserveCase) {
+    if (this.caseMode !== 'upperFixed') {
       this.uppercaseEnabled = false;
+      this.caseMode = 'lower';
     }
     this.toneOverlayOpen = false;
   }
@@ -136,6 +139,12 @@ export class PinyinVirtualKeyboard {
         this.toneKeys = [...this.toneKeys, ...getTones('ü', letterCase), rootLetter];
       }
     }
+  }
+
+  protected switchCaseMode(): void {
+    const nextModeIndex = (CASE_MODE_FLOW.indexOf(this.caseMode) + 1) % CASE_MODE_FLOW.length;
+    this.caseMode = CASE_MODE_FLOW[nextModeIndex];
+    this.uppercaseEnabled = this.caseMode === 'upper' || this.caseMode === 'upperFixed';
   }
 
   /**
