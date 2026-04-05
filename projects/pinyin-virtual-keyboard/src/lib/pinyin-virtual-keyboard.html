@@ -2,15 +2,15 @@
   @for (row of layout(); track row) {
     <div class="pvk__row">
       @for (key of row; track key; let columnIndex = $index) {
-        <!--        TODO Ripple -->
         @switch (key) {
           @case ('BACKSPACE') {
-            <div class="pvk__key" (click)="clickBackspace()">
+            <button aria-label="Backspace" class="pvk__key" (click)="clickBackspace()">
               <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
-            </div>
+            </button>
           }
           @case ('SHIFT') {
-            <div
+            <button
+              aria-label="Shift"
               class="pvk__key"
               (click)="switchCaseMode()"
               [class.pvk__key--active]="uppercaseEnabled"
@@ -26,11 +26,12 @@
                   <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
                 }
               }
-            </div>
+            </button>
           }
           @default {
-            <div
+            <button
               #letterKeyRef
+              aria-label="{{key}}"
               class="pvk__key pvk__ripple"
               keyLongPress
               (longPress)="openTones(key, columnIndex, letterKeyRef)"
@@ -42,26 +43,26 @@
               @if (!uppercaseEnabled) {
                 {{ key | lowercase }}
               }
-            </div>
+            </button>
           }
         }
       }
     </div>
   }
   <div class="pvk__row">
-    <div class="pvk__key pvk__key--special" (click)="switchLayoutType()">
+    <button aria-label="Switch keyboard layout" class="pvk__key pvk__key--special" (click)="switchLayoutType()">
       @if (layoutType() === 'letters') {
         ,?&#64;
       } @else {
         abc
       }
-    </div>
-    <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
+    </button>
+    <button aria-label="Space" class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
       <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
-    </div>
-    <div class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
+    </button>
+    <button aria-label="Submit" class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
       <svg-icon name="check" [svgStyle]="iconBaseStyle" />
-    </div>
+    </button>
   </div>
 </div>
 
@@ -77,9 +78,9 @@
     (backdropClick)="toneOverlayOpen = false"
   >
     @for (tone of toneKeys; track tone) {
-      <div class="pvk__key pvk__tone-key" (click)="writeCharacter(tone)">
+      <button aria-label="{{ tone }}" class="pvk__key pvk__tone-key" (click)="writeCharacter(tone)">
         {{ tone }}
-      </div>
+      </button>
     }
   </ng-template>
 }

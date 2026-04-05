@@ -6,6 +6,10 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+label {
+  margin: 0 1rem;
+}
+
 .device {
   position: relative;
 

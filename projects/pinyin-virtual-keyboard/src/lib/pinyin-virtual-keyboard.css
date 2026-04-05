@@ -35,6 +35,7 @@
   height: var(--pvk-key-height, 40px);
   background-color: var(--pvk-key-background-color, #252525);
   border-radius: 3px;
+  border-style: none;
 
   flex: 1;
   display: flex;
