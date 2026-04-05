@@ -79,6 +79,17 @@
   }
 }
 
+.pvk__ripple {
+  background-position: center;
+  transition: background 0.6s;
+
+  &:active {
+    background-color: var(--pvk-ripple-color, #878787);
+    background-size: 100%;
+    transition: background 0s;
+  }
+}
+
 /* Use ng-deep to avoid importing a css file in the client app or to disable the encapsulation */
 ::ng-deep .pvk__tone-overlay {
   background-color: var(--pvk-tone-overlay-background-color, #181818);
