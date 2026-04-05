@@ -32,7 +32,7 @@
 }
 
 .pvk__key {
-  height: 50px;
+  height: var(--pvk-key-height, 40px);
   background-color: var(--pvk-key-background-color, #252525);
   border-radius: 3px;
 
@@ -58,7 +58,7 @@
   &.pvk__key--special {
     background-color: var(--pvk-special-key-background-color, #252525);
     border-radius: 20px;
-    height: 40px;
+    height: var(--pvk-key-height, 40px);
   }
 
   &.pvk__key--active {
@@ -96,7 +96,7 @@
 
 ::ng-deep .pvk__tone-key {
   width: 30px;
-  height: 40px;
+  height: var(--pvk-key-height, 40px);
 }
 
 svg-icon {

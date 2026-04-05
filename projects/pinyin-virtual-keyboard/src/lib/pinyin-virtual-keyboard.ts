@@ -2,7 +2,7 @@ import { CdkConnectedOverlay, FlexibleConnectedPositionStrategyOrigin } from '@a
 import { LowerCasePipe } from '@angular/common';
 import { Component, computed, input, model, output } from '@angular/core';
 
-import { AZERTY, KeyboardLayout, QWERTY } from './model/keyboard-layout';
+import { AZERTY, KeyboardLayout, NUMBERS, QWERTY } from './model/keyboard-layout';
 import { KeyLongPress } from './utils/key-long-press';
 import { getTones, hasTones } from './utils/pinyin-utils';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
@@ -45,6 +45,9 @@ export class PinyinVirtualKeyboard {
   /** All the typed characters */
   public readonly value = model<string>('');
 
+  /** Whether the numeric row should always be visible at the top of the keyboard */
+  public readonly numericRow = input(true);
+
   /** A character has been typed */
   public readonly typed = output<string>();
 
@@ -57,11 +60,20 @@ export class PinyinVirtualKeyboard {
   // Internal state
 
   protected readonly layout = computed<string[][]>(() => {
+    let layout: string[][];
     if (Array.isArray(this.keyboardLayout())) {
-      return this.keyboardLayout() as string[][];
+      layout = this.keyboardLayout() as string[][];
     } else {
-      return this.keyboardLayout() === 'QWERTY' ? QWERTY : AZERTY;
+      layout = this.keyboardLayout() === 'QWERTY' ? QWERTY : AZERTY;
     }
+
+    layout = structuredClone(layout);
+
+    if (this.numericRow()) {
+      layout.unshift(NUMBERS);
+    }
+
+    return layout;
   });
 
   protected readonly iconBaseStyle = {
