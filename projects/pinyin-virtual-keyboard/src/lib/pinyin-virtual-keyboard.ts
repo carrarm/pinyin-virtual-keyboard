@@ -11,7 +11,7 @@ import {
   SpecialLayout,
 } from './model/keyboard-layout';
 import { KeyLongPress } from './utils/key-long-press';
-import { getTones, hasTones } from './utils/pinyin-utils';
+import { getTones, hasTones, simplifyText } from './utils/pinyin-utils';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 import { ICONS } from './utils/icons';
 import { CaseMode } from './model/model';
@@ -62,6 +62,9 @@ export class PinyinVirtualKeyboard {
 
   /** Whether the numeric row should always be visible at the top of the keyboard */
   public readonly baseKeyboardNumericRow = input(true);
+
+  /** Whether to replace letter and number combinations with toned letters */
+  public readonly simplify = input(true);
 
   /** A character has been typed */
   public readonly typed = output<string>();
@@ -120,7 +123,13 @@ export class PinyinVirtualKeyboard {
    */
   protected writeCharacter(character: string): void {
     const typedChar = this.uppercaseEnabled ? character : character.toLowerCase();
-    this.value.update((text) => text + typedChar);
+    this.value.update((text) => {
+      let fullText = text + typedChar;
+      if (this.simplify() && ['1', '2', '3', '4', 'v'].includes(typedChar.toLowerCase())) {
+        fullText = simplifyText(fullText, typedChar);
+      }
+      return fullText;
+    });
     this.typed.emit(typedChar);
     if (this.caseMode !== 'upperFixed') {
       this.uppercaseEnabled = false;
