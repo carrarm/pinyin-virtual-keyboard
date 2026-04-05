@@ -1,15 +1,8 @@
 import { CdkConnectedOverlay, FlexibleConnectedPositionStrategyOrigin } from '@angular/cdk/overlay';
 import { LowerCasePipe } from '@angular/common';
-import { Component, computed, input, model, output, signal } from '@angular/core';
+import { booleanAttribute, Component, computed, input, model, output, signal } from '@angular/core';
 
-import {
-  AZERTY,
-  KeyboardLayout,
-  NUMBERS,
-  QWERTY,
-  SPECIAL,
-  SpecialLayout,
-} from './model/keyboard-layout';
+import { KeyboardLayout, NUMBERS, PREDEFINED, SymbolLayout } from './model/keyboard-layout';
 import { KeyLongPress } from './utils/key-long-press';
 import { getTones, hasTones, simplifyText } from './utils/pinyin-utils';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
@@ -29,6 +22,7 @@ const CASE_MODE_FLOW: CaseMode[] = ['lower', 'upper', 'upperFixed'];
   host: {
     '[class.pvk--anchor-fixed]': 'anchor() === "fixed"',
     '[class.pvk--anchor-container]': 'anchor() === "container"',
+    '[class.custom]': 'anchor() === "custom"',
   },
   standalone: true,
 })
@@ -36,16 +30,16 @@ export class PinyinVirtualKeyboard {
   // Public API
 
   /**
-   * Order of the keys in the keyboard. It can be the predefined `QWERTY` or `AZERTY` layouts, or any
+   * Order of the keys in the keyboard. It can be the predefined `QWERTY`, `QWERTZ` or `AZERTY` layouts, or any
    * custom layout. Use `SHIFT` and `BACKSPACE` to include these keys in your custom layout.
    */
   public readonly keyboardLayout = input<KeyboardLayout>('QWERTY');
 
   /**
-   * Order of the keys in the alternative keyboard (special keys). It can be the predefined `SPECIAL`
+   * Order of the keys in the alternative keyboard (special keys). It can be the predefined `SYMBOL`
    * layout, or any custom layout.
    */
-  public readonly specialKeyboardLayout = input<SpecialLayout>('SPECIAL');
+  public readonly symbolKeyboardLayout = input<SymbolLayout>('SYMBOL');
 
   /**
    * Where the keyboard will be positioned:
@@ -61,10 +55,10 @@ export class PinyinVirtualKeyboard {
   public readonly value = model<string>('');
 
   /** Whether the numeric row should always be visible at the top of the keyboard */
-  public readonly baseKeyboardNumericRow = input(true);
+  public readonly baseKeyboardNumericRow = input(true, { transform: booleanAttribute });
 
   /** Whether to replace letter and number combinations with toned letters */
-  public readonly simplify = input(true);
+  public readonly simplify = input(true, { transform: booleanAttribute });
 
   /** A character has been typed */
   public readonly typed = output<string>();
@@ -77,11 +71,11 @@ export class PinyinVirtualKeyboard {
 
   // Internal state
 
-  protected layoutType = signal<'letters' | 'special'>('letters');
+  protected layoutType = signal<'letters' | 'symbol'>('letters');
 
   protected readonly layout = computed<string[][]>(() => {
     const baseLayout =
-      this.layoutType() === 'special' ? this.specialKeyboardLayout() : this.keyboardLayout();
+      this.layoutType() === 'symbol' ? this.symbolKeyboardLayout() : this.keyboardLayout();
     const layout = structuredClone(this.getLayout(baseLayout));
 
     if (this.layoutType() === 'letters' && this.baseKeyboardNumericRow()) {
@@ -167,7 +161,7 @@ export class PinyinVirtualKeyboard {
   }
 
   protected switchLayoutType(): void {
-    this.layoutType.update((layoutType) => (layoutType === 'letters' ? 'special' : 'letters'));
+    this.layoutType.update((layoutType) => (layoutType === 'letters' ? 'symbol' : 'letters'));
   }
 
   /**
@@ -188,22 +182,12 @@ export class PinyinVirtualKeyboard {
     return offset;
   }
 
-  private getLayout(base: KeyboardLayout | SpecialLayout): string[][] {
+  private getLayout(base: KeyboardLayout | SymbolLayout): string[][] {
     let layout: string[][] = [];
     if (Array.isArray(base)) {
       layout = base as string[][];
     } else {
-      switch (base) {
-        case 'AZERTY':
-          layout = AZERTY;
-          break;
-        case 'QWERTY':
-          layout = QWERTY;
-          break;
-        case 'SPECIAL':
-          layout = SPECIAL;
-          break;
-      }
+      layout = PREDEFINED[base];
     }
     return layout;
   }
