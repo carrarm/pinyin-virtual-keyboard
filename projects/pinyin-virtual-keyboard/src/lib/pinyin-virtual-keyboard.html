@@ -45,8 +45,13 @@
     </div>
   }
   <div class="pvk__row">
-    <!-- TODO: remove the forced color -->
-    <div class="pvk__key pvk__key--special" [style.color]="'darkgray'">?123</div>
+    <div class="pvk__key pvk__key--special" (click)="switchLayoutType()">
+      @if (layoutType() === 'letters') {
+        ,?&#64;
+      } @else {
+        abc
+      }
+    </div>
     <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
           <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
     </div>

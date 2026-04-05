@@ -1,8 +1,15 @@
 import { CdkConnectedOverlay, FlexibleConnectedPositionStrategyOrigin } from '@angular/cdk/overlay';
 import { LowerCasePipe } from '@angular/common';
-import { Component, computed, input, model, output } from '@angular/core';
+import { Component, computed, input, model, output, signal } from '@angular/core';
 
-import { AZERTY, KeyboardLayout, NUMBERS, QWERTY } from './model/keyboard-layout';
+import {
+  AZERTY,
+  KeyboardLayout,
+  NUMBERS,
+  QWERTY,
+  SPECIAL,
+  SpecialLayout,
+} from './model/keyboard-layout';
 import { KeyLongPress } from './utils/key-long-press';
 import { getTones, hasTones } from './utils/pinyin-utils';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
@@ -35,6 +42,12 @@ export class PinyinVirtualKeyboard {
   public readonly keyboardLayout = input<KeyboardLayout>('QWERTY');
 
   /**
+   * Order of the keys in the alternative keyboard (special keys). It can be the predefined `SPECIAL`
+   * layout, or any custom layout.
+   */
+  public readonly specialKeyboardLayout = input<SpecialLayout>('SPECIAL');
+
+  /**
    * Where the keyboard will be positioned:
    * - fixed: bottom of the screen
    * - container: bottom of the parent container (must be configured with `position: relative`)
@@ -48,7 +61,7 @@ export class PinyinVirtualKeyboard {
   public readonly value = model<string>('');
 
   /** Whether the numeric row should always be visible at the top of the keyboard */
-  public readonly numericRow = input(true);
+  public readonly baseKeyboardNumericRow = input(true);
 
   /** A character has been typed */
   public readonly typed = output<string>();
@@ -61,17 +74,14 @@ export class PinyinVirtualKeyboard {
 
   // Internal state
 
+  protected layoutType = signal<'letters' | 'special'>('letters');
+
   protected readonly layout = computed<string[][]>(() => {
-    let layout: string[][];
-    if (Array.isArray(this.keyboardLayout())) {
-      layout = this.keyboardLayout() as string[][];
-    } else {
-      layout = this.keyboardLayout() === 'QWERTY' ? QWERTY : AZERTY;
-    }
+    const baseLayout =
+      this.layoutType() === 'special' ? this.specialKeyboardLayout() : this.keyboardLayout();
+    const layout = structuredClone(this.getLayout(baseLayout));
 
-    layout = structuredClone(layout);
-
-    if (this.numericRow()) {
+    if (this.layoutType() === 'letters' && this.baseKeyboardNumericRow()) {
       layout.unshift(NUMBERS);
     }
 
@@ -147,6 +157,10 @@ export class PinyinVirtualKeyboard {
     this.uppercaseEnabled = this.caseMode === 'upper' || this.caseMode === 'upperFixed';
   }
 
+  protected switchLayoutType(): void {
+    this.layoutType.update((layoutType) => (layoutType === 'letters' ? 'special' : 'letters'));
+  }
+
   /**
    * Compute the overlay offset based on the position of the key in the row.
    * The two leftmost and the two rightmost keys shouldn't try and display a centered
@@ -163,5 +177,25 @@ export class PinyinVirtualKeyboard {
       offset = -TONE_KEY_WIDTH_PX * 2;
     }
     return offset;
+  }
+
+  private getLayout(base: KeyboardLayout | SpecialLayout): string[][] {
+    let layout: string[][] = [];
+    if (Array.isArray(base)) {
+      layout = base as string[][];
+    } else {
+      switch (base) {
+        case 'AZERTY':
+          layout = AZERTY;
+          break;
+        case 'QWERTY':
+          layout = QWERTY;
+          break;
+        case 'SPECIAL':
+          layout = SPECIAL;
+          break;
+      }
+    }
+    return layout;
   }
 }
