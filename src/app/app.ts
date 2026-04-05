@@ -1,15 +1,15 @@
-import { Component, signal } from '@angular/core';
-import { PinyinVirtualKeyboard } from 'pinyin-virtual-keyboard';
-import { FormsModule } from '@angular/forms';
+import { Component, signal } from "@angular/core";
+import { PinyinVirtualKeyboard } from "pinyin-virtual-keyboard";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   imports: [FormsModule, PinyinVirtualKeyboard],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  templateUrl: "./app.html",
+  styleUrl: "./app.css",
 })
 export class App {
-  protected readonly mobileValue = signal('');
-  protected readonly landscapeValue = signal('');
-  protected readonly portraitValue = signal('');
+  protected readonly mobileValue = signal("");
+  protected readonly landscapeValue = signal("");
+  protected readonly portraitValue = signal("");
 }
