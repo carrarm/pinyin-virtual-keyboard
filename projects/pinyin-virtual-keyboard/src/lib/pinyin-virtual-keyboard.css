@@ -31,7 +31,7 @@
   gap: var(--pvk-key-gap, 4px);
 }
 
-::ng-deep .pvk__key {
+.pvk__key {
   height: 50px;
   background-color: var(--pvk-key-background-color, #252525);
   border-radius: 3px;
@@ -79,6 +79,7 @@
   }
 }
 
+/* Use ng-deep to avoid importing a css file in the client app or to disable the encapsulation */
 ::ng-deep .pvk__tone-overlay {
   background-color: var(--pvk-tone-overlay-background-color, #181818);
   width: fit-content;
@@ -96,4 +97,8 @@
 ::ng-deep .pvk__tone-key {
   width: 30px;
   height: 40px;
+}
+
+svg-icon {
+  height: 20px;
 }

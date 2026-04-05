@@ -45,9 +45,6 @@ export class PinyinVirtualKeyboard {
   /** All the typed characters */
   public readonly value = model<string>('');
 
-  /** Text to show on the Space key */
-  public readonly spaceKeyText = input('Space');
-
   /** A character has been typed */
   public readonly typed = output<string>();
 

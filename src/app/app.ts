@@ -9,5 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './app.css',
 })
 export class App {
+  protected readonly mobileValue = signal('');
   protected readonly landscapeValue = signal('');
+  protected readonly portraitValue = signal('');
 }

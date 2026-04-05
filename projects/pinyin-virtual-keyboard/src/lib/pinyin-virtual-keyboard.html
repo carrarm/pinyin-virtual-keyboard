@@ -3,7 +3,7 @@
     <div class="pvk__row">
       @if (isLast) {
         <div
-          class="pvk__key pvk__key--special"
+          class="pvk__key"
           (click)="uppercaseEnabled = !uppercaseEnabled"
           [class.pvk__key--active]="uppercaseEnabled"
         >
@@ -32,16 +32,17 @@
         </div>
       }
       @if (isLast) {
-        <div class="pvk__key pvk__key--special" (click)="clickBackspace()">
+        <div class="pvk__key" (click)="clickBackspace()">
           <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
         </div>
       }
     </div>
   }
   <div class="pvk__row">
-    <div class="pvk__key pvk__key--special">?123</div>
+    <!-- TODO: remove the forced color -->
+    <div class="pvk__key pvk__key--special" [style.color]="'darkgray'">?123</div>
     <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ', true)">
-      {{ spaceKeyText() }}
+          <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
     </div>
     <div class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
       <svg-icon name="check" [svgStyle]="iconBaseStyle" />
