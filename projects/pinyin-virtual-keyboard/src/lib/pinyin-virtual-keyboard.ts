@@ -37,7 +37,7 @@ export class PinyinVirtualKeyboard {
 
   /**
    * Order of the keys in the keyboard. It can be the predefined `QWERTY` or `AZERTY` layouts, or any
-   * custom layout.
+   * custom layout. Use `SHIFT` and `BACKSPACE` to include these keys in your custom layout.
    */
   public readonly keyboardLayout = input<KeyboardLayout>('QWERTY');
 

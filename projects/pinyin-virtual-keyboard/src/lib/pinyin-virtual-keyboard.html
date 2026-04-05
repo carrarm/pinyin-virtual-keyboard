@@ -1,46 +1,50 @@
 <div class="pvk">
-  @for (row of layout(); track row; let isLast = $last) {
+  @for (row of layout(); track row) {
     <div class="pvk__row">
-      @if (isLast) {
-        <div
-          class="pvk__key"
-          (click)="switchCaseMode()"
-          [class.pvk__key--active]="uppercaseEnabled"
-        >
-          @switch (caseMode) {
-            @case ('upper') {
-              <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
-            }
-            @case ('upperFixed') {
-              <svg-icon name="arrow-up-bold-box" [svgStyle]="iconBaseStyle" />
-            }
-            @case ('lower') {
-              <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
-            }
-          }
-        </div>
-      }
       @for (key of row; track key; let columnIndex = $index) {
         <!--        TODO Ripple -->
-        <div
-          #letterKeyRef
-          class="pvk__key"
-          keyLongPress
-          (longPress)="openTones(key, columnIndex, letterKeyRef)"
-          (click)="writeCharacter(key)"
-        >
-          @if (uppercaseEnabled) {
-            {{ key }}
+        @switch (key) {
+          @case ('BACKSPACE') {
+            <div class="pvk__key" (click)="clickBackspace()">
+              <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
+            </div>
           }
-          @if (!uppercaseEnabled) {
-            {{ key | lowercase }}
+          @case ('SHIFT') {
+            <div
+              class="pvk__key"
+              (click)="switchCaseMode()"
+              [class.pvk__key--active]="uppercaseEnabled"
+            >
+              @switch (caseMode) {
+                @case ('upper') {
+                  <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
+                }
+                @case ('upperFixed') {
+                  <svg-icon name="arrow-up-bold-box" [svgStyle]="iconBaseStyle" />
+                }
+                @case ('lower') {
+                  <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
+                }
+              }
+            </div>
           }
-        </div>
-      }
-      @if (isLast) {
-        <div class="pvk__key" (click)="clickBackspace()">
-          <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
-        </div>
+          @default {
+            <div
+              #letterKeyRef
+              class="pvk__key"
+              keyLongPress
+              (longPress)="openTones(key, columnIndex, letterKeyRef)"
+              (click)="writeCharacter(key)"
+            >
+              @if (uppercaseEnabled) {
+                {{ key }}
+              }
+              @if (!uppercaseEnabled) {
+                {{ key | lowercase }}
+              }
+            </div>
+          }
+        }
       }
     </div>
   }
@@ -53,7 +57,7 @@
       }
     </div>
     <div class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
-          <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
+      <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
     </div>
     <div class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
       <svg-icon name="check" [svgStyle]="iconBaseStyle" />
