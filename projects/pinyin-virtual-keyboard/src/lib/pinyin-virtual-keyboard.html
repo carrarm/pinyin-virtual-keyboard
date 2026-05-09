@@ -1,0 +1,86 @@
+<div class="pvk">
+  @for (row of layout(); track row) {
+    <div class="pvk__row">
+      @for (key of row; track $index; let columnIndex = $index) {
+        @switch (key) {
+          @case ('BACKSPACE') {
+            <button aria-label="Backspace" class="pvk__key" (click)="clickBackspace()">
+              <svg-icon name="backspace-outline" [svgStyle]="iconBaseStyle" />
+            </button>
+          }
+          @case ('SHIFT') {
+            <button
+              aria-label="Shift"
+              class="pvk__key"
+              (click)="switchCaseMode()"
+              [class.pvk__key--active]="uppercaseEnabled"
+            >
+              @switch (caseMode) {
+                @case ('upper') {
+                  <svg-icon name="arrow-up-bold" [svgStyle]="iconBaseStyle" />
+                }
+                @case ('upperFixed') {
+                  <svg-icon name="arrow-up-bold-box" [svgStyle]="iconBaseStyle" />
+                }
+                @case ('lower') {
+                  <svg-icon name="arrow-up-bold-outline" [svgStyle]="iconBaseStyle" />
+                }
+              }
+            </button>
+          }
+          @default {
+            <button
+              #letterKeyRef
+              aria-label="{{key}}"
+              class="pvk__key pvk__ripple"
+              keyLongPress
+              (longPress)="openTones(key, columnIndex, letterKeyRef)"
+              (click)="writeCharacter(key)"
+            >
+              @if (uppercaseEnabled) {
+                {{ key }}
+              }
+              @if (!uppercaseEnabled) {
+                {{ key | lowercase }}
+              }
+            </button>
+          }
+        }
+      }
+    </div>
+  }
+  <div class="pvk__row">
+    <button aria-label="Switch keyboard layout" class="pvk__key pvk__key--special" (click)="switchLayoutType()">
+      @if (layoutType() === 'letters') {
+        ,?&#64;
+      } @else {
+        abc
+      }
+    </button>
+    <button aria-label="Space" class="pvk__key pvk__key--special pvk__key--space" (click)="writeCharacter(' ')">
+      <svg-icon name="keyboard-space" [svgStyle]="iconBaseStyle" />
+    </button>
+    <button aria-label="Submit" class="pvk__key pvk__key--special pvk__key--validate" (click)="submitText.emit()">
+      <svg-icon name="check" [svgStyle]="iconBaseStyle" />
+    </button>
+  </div>
+</div>
+
+@if (toneOverlayOrigin) {
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="toneOverlayOrigin"
+    [cdkConnectedOverlayOpen]="toneOverlayOpen"
+    [cdkConnectedOverlayOffsetY]="toneOverlayOffsetY"
+    [cdkConnectedOverlayOffsetX]="toneOverlayOffsetX"
+    cdkConnectedOverlayPanelClass="pvk__tone-overlay"
+    cdkConnectedOverlayHasBackdrop
+    (backdropClick)="toneOverlayOpen = false"
+  >
+    @for (tone of toneKeys; track tone) {
+      <button aria-label="{{ tone }}" class="pvk__key pvk__tone-key" (click)="writeCharacter(tone)">
+        {{ tone }}
+      </button>
+    }
+  </ng-template>
+}

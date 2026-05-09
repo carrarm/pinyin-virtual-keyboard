@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+pinyin-virtual-keyboard.custom {
+  position: absolute;
+  left: 500px;
+  width: 400px;
+}
+
+.settings {
+  border: solid 1px gray;
+  margin-bottom: 2rem;
+
+  label {
+    width: 180px;
+    font-weight: bold;
+  }
+}
+
+.device {
+  position: relative;
+
+  height: 280px;
+  border: solid 1px gray;
+}
+
+.field-row {
+  margin: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+.mobile {
+  width: 400px;
+}
+
+.tablet-landscape {
+  width: 1024px;
+}
+
+.tablet-portrait {
+  width: 1400px;
+}
