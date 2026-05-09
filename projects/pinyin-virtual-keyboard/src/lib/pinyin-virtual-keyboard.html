@@ -1,7 +1,7 @@
 <div class="pvk">
   @for (row of layout(); track row) {
     <div class="pvk__row">
-      @for (key of row; track key; let columnIndex = $index) {
+      @for (key of row; track $index; let columnIndex = $index) {
         @switch (key) {
           @case ('BACKSPACE') {
             <button aria-label="Backspace" class="pvk__key" (click)="clickBackspace()">
