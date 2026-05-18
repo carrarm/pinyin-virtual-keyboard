@@ -1,0 +1,35 @@
+.help {
+  position: relative;
+  cursor: help;
+
+  &:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .info {
+    font-size: 1rem;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  z-index: 1;
+  left: 0;
+  width: 260px;
+  padding: 12px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 10px 15px rgb(0 0 0 / 0.12);
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(-4px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s,
+    visibility 0.2s;
+}
