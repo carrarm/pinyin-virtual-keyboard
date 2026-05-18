@@ -86,7 +86,7 @@ export function simplifyText(text: string, lastTyped: string): string {
 
   if (lastTyped.toUpperCase() === 'V') {
     const replacedV = lastTyped === 'V' ? 'Ü' : 'ü';
-    simplified = simplified.replace(lastTyped, replacedV);
+    simplified = simplified.replace(/.$/, replacedV);
   }
 
   const digit = Number.parseInt(lastTyped);
