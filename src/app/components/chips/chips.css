@@ -1,0 +1,18 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 16px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+
+  &.selected {
+    background-color: #2b85dc;
+    color: white;
+  }
+}
