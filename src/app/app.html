@@ -1,94 +1,90 @@
 <main>
+  <h1>Pinyin virtual keyboard</h1>
   <div class="settings">
     <div class="field-row">
       <label for="device">Device format</label>
-      <select id="device" [(ngModel)]="format">
-        <option value="mobile">Mobile</option>
-        <option value="tablet-landscape">Tablet landscape</option>
-        <option value="tablet-portrait">Tablet portrait</option>
-      </select>
+      <app-chips [chips]="formatChips" (onClicked)="format.set($event)" />
     </div>
 
     <div class="field-row">
-      <label for="keyboard-anchor">Keyboard anchor</label>
-      <select id="keyboard-anchor" [(ngModel)]="anchor">
-        <option value="container">Container</option>
-        <option value="fixed">Fixed</option>
-        <option value="custom">Custom</option>
-      </select>
-
-      <span>
-        to fix the keyboard in the view. "Custom" will disable the auto-positioning and
-        lets you use your own class.
-      </span>
+      <div class="field-label">
+        <label for="keyboard-anchor">Keyboard anchor</label>
+        <app-help-tooltip>
+          <span>
+            To fix the keyboard in the view. "Custom" will disable the auto-positioning and
+            lets you use your own class.
+          </span>
+        </app-help-tooltip>
+      </div>
+      <app-chips [chips]="anchorChips" (onClicked)="anchorChange($event)" />
     </div>
 
     <div class="field-row">
-      <label for="keyboard-layout">Keyboard layout</label>
-      <select id="keyboard-layout" [(ngModel)]="letterLayout">
-        <option value="QWERTY">QWERTY</option>
-        <option value="QWERTZ">QWERTZ</option>
-        <option value="AZERTY">AZERTY</option>
-        <option value="custom">Custom</option>
-      </select>
-
-      <span>
-        Use a predefined layout or define your own. Use SHIFT and BACKSPACE to insert
-        these keys in your layout.
-      </span>
+      <div class="field-label">
+        <label for="keyboard-layout">Keyboard layout</label>
+        <app-help-tooltip>
+          <span>
+            Use a predefined layout or define your own. Use SHIFT and BACKSPACE to insert
+            these keys in your layout.
+          </span>
+        </app-help-tooltip>
+      </div>
+      <app-chips [chips]="letterLayoutChips" (onClicked)="letterLayout.set($event)" />
     </div>
 
     <div class="field-row">
-      <label for="symbol-layout">Symbol keyboard layout</label>
-      <select id="symbol-layout" [(ngModel)]="symbolLayout">
-        <option value="default">Default</option>
-        <option value="custom">Custom</option>
-      </select>
-
-      <span>
-        Use the predefined layout or define your own. Numbers are not included by default
-        when using a custom layout.
-      </span>
+      <div class="field-label">
+        <label for="symbol-layout">Symbol keyboard layout</label>
+        <app-help-tooltip>
+          <span>
+            Use a predefined layout or define your own. Use SHIFT and BACKSPACE to insert
+            these keys in your layout.
+          </span>
+        </app-help-tooltip>
+      </div>
+      <app-chips [chips]="symbolLayoutChips" (onClicked)="symbolLayout.set($event)" />
     </div>
 
     <div class="field-row">
-      <label for="simplify">Simplify text</label>
-      <select id="simplify" [(ngModel)]="simplify">
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
+      <div class="field-label">
+        <label for="simplify">Simplify text</label>
+        <app-help-tooltip>
+          <span>
+            Combine a letter and digit to quickly apply a tone (a1, a2, ...). Type v to use ü.
+          </span>
+        </app-help-tooltip>
+      </div>
+      <app-chips [chips]="simplifyChips" (onClicked)="simplify.set($event === 'true')" />
 
-      <span>
-        Combine a letter and digit to quickly apply a tone (a1, a2, ...). Type v to use ü.
-      </span>
     </div>
 
     <div class="field-row">
-      <label for="numeric-row">Top numeric row</label>
-      <select id="numeric-row" [(ngModel)]="numericRow">
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
+      <div class="field-label">
+        <label for="numeric-row">Top numeric row</label>
+        <app-help-tooltip>
+          <span>
+            Pin the numeric row at the top of the keyboard when displaying the letters. This
+            row will still appear in the symbol keyboard (if using a predefined layout).
+          </span>
+        </app-help-tooltip>
+      </div>
+      <app-chips [chips]="numericRowChips" (onClicked)="numericRow.set($event === 'true')" />
 
-      <span>
-        Pin the numeric row at the top of the keyboard when displaying the letters. This
-        row will still appear in the symbol keyboard (if using a predefined layout).
-      </span>
+
     </div>
   </div>
   <div class="device" [class]="format()">
-    <div class="field-row pinyin-text">
-      <label for="text-input">Text:</label>
-      <input id="text-input" [(ngModel)]="value" />
-    </div>
+    <div class="keyboard-demo">
+      <input id="text-input" [(ngModel)]="value" placeholder="Tap to start" readonly />
 
-    <pinyin-virtual-keyboard
-      [(value)]="value"
-      [keyboardLayout]="pvkLayout()"
-      [symbolKeyboardLayout]="pvkSymbolLayout()"
-      [simplify]="simplify()"
-      [baseKeyboardNumericRow]="numericRow()"
-      [anchor]="anchor()"
-    />
+      <pinyin-virtual-keyboard 
+        [(value)]="value" 
+        [keyboardLayout]="pvkLayout()" 
+        [symbolKeyboardLayout]="pvkSymbolLayout()"
+        [simplify]="simplify()" 
+        [baseKeyboardNumericRow]="numericRow()" 
+        [anchor]="anchor()" 
+      />
+    </div>
   </div>
 </main>

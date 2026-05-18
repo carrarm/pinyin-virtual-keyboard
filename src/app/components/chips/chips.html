@@ -1,0 +1,7 @@
+<div class="chips">
+  @for (chip of chips(); track chip.label ) {
+    <div class="chip" [ngClass]="{ 'selected': chip.selected }" (click)="onChipClick(chip)">
+      {{ chip.label }}
+    </div>
+  }
+</div>
